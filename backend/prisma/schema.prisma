@@ -1,0 +1,126 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(uuid())
+  email         String    @unique
+  password      String
+  fullName      String
+  profileImage  String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  profile       UserProfile?
+  resumes       Resume[]
+  applications  Application[]
+  chatHistory   ChatMessage[]
+}
+
+model UserProfile {
+  id              String   @id @default(uuid())
+  userId          String   @unique
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  skills          String[]
+  experience      Json[]
+  education       Json[]
+  preferences     Json?
+  minSalary       Int?
+  locations       String[]
+  industries      String[]
+  jobLevels       String[]
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model Resume {
+  id            String   @id @default(uuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  title         String
+  content       String
+  fileUrl       String?
+  isActive      Boolean  @default(true)
+  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  analyses      ResumeAnalysis[]
+}
+
+model Job {
+  id            String   @id @default(uuid())
+  title         String
+  company       String
+  description   String
+  location      String
+  salary        String?
+  jobType       String
+  url           String
+  source        String
+  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  applications  Application[]
+}
+
+model Application {
+  id            String   @id @default(uuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  jobId         String
+  job           Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  
+  status        ApplicationStatus @default(NOT_SUBMITTED)
+  coverLetter   String?
+  customAnswers Json?
+  notes         String?
+  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+enum ApplicationStatus {
+  NOT_SUBMITTED
+  SUBMITTED
+  UNDER_REVIEW
+  INTERVIEW_REQUESTED
+  INTERVIEWED
+  OFFER_RECEIVED
+  REJECTED
+  ACCEPTED
+}
+
+model ResumeAnalysis {
+  id            String   @id @default(uuid())
+  resumeId      String
+  resume        Resume   @relation(fields: [resumeId], references: [id], onDelete: Cascade)
+  
+  jobUrl        String
+  score         Int
+  suggestions   String[]
+  matchedSkills String[]
+  missingSkills String[]
+  
+  createdAt     DateTime @default(now())
+}
+
+model ChatMessage {
+  id            String   @id @default(uuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  role          String   // 'user' or 'assistant'
+  content       String
+  
+  createdAt     DateTime @default(now())
+}
