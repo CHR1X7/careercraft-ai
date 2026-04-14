@@ -21,9 +21,6 @@ module.exports = {
           900: '#0c4a6e',
         },
       },
-      fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
-      },
     },
   },
   plugins: [],
