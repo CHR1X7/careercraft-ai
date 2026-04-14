@@ -1,20 +1,17 @@
-import os
-from openai import OpenAI
 from typing import List, Dict
+from services.free_llm import GroqLLM
 
 class ChatAssistant:
     def __init__(self):
-        self.client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
-        self.system_prompt = """
-You are CareerCraft AI, an intelligent career assistant. You help users with:
-- Resume optimization
-- Job search strategies
+        self.llm = GroqLLM()
+        self.system_prompt = """You are CareerCraft AI, a helpful career assistant. You help users with:
+- Resume optimization and feedback
+- Job search strategies and tips
 - Interview preparation
-- Career advice
-- Application materials
+- Career advice and guidance
+- Application materials (cover letters, etc.)
 
-Be helpful, encouraging, and provide actionable advice. Keep responses concise but informative.
-"""
+Be encouraging, professional, and provide actionable advice. Keep responses concise (under 200 words) but informative."""
     
     async def chat(self, message: str, history: List[Dict] = []) -> str:
         """Chat with the AI assistant"""
@@ -23,21 +20,16 @@ Be helpful, encouraging, and provide actionable advice. Keep responses concise b
             {"role": "system", "content": self.system_prompt}
         ]
         
-        # Add conversation history
-        messages.extend(history[-10:])  # Keep last 10 messages
+        # Add last 6 messages from history (to stay within token limits)
+        messages.extend(history[-6:])
         
         # Add current message
         messages.append({"role": "user", "content": message})
         
         try:
-            response = self.client.chat.completions.create(
-                model="gpt-4-turbo-preview",
-                messages=messages,
-                temperature=0.7,
-                max_tokens=500
-            )
-            
-            return response.choices[0].message.content
+            response = self.llm.query(messages, max_tokens=400)
+            return response.strip()
             
         except Exception as e:
-            raise Exception(f"Chat failed: {str(e)}")
+            print(f"Chat error: {str(e)}")
+            return "I'm here to help with your job search! I can assist with resume optimization, interview preparation, and career advice. How can I help you today?"
