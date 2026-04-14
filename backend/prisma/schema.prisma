@@ -19,7 +19,6 @@ model User {
   profile       UserProfile?
   resumes       Resume[]
   applications  Application[]
-  chatHistory   ChatMessage[]
 }
 
 model UserProfile {
@@ -31,10 +30,6 @@ model UserProfile {
   experience      Json[]
   education       Json[]
   preferences     Json?
-  minSalary       Int?
-  locations       String[]
-  industries      String[]
-  jobLevels       String[]
   
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
@@ -47,13 +42,10 @@ model Resume {
   
   title         String
   content       String
-  fileUrl       String?
   isActive      Boolean  @default(true)
   
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
-  
-  analyses      ResumeAnalysis[]
 }
 
 model Job {
@@ -62,10 +54,7 @@ model Job {
   company       String
   description   String
   location      String
-  salary        String?
-  jobType       String
   url           String
-  source        String
   
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
@@ -82,7 +71,6 @@ model Application {
   
   status        ApplicationStatus @default(NOT_SUBMITTED)
   coverLetter   String?
-  customAnswers Json?
   notes         String?
   
   createdAt     DateTime @default(now())
@@ -94,33 +82,6 @@ enum ApplicationStatus {
   SUBMITTED
   UNDER_REVIEW
   INTERVIEW_REQUESTED
-  INTERVIEWED
-  OFFER_RECEIVED
   REJECTED
   ACCEPTED
-}
-
-model ResumeAnalysis {
-  id            String   @id @default(uuid())
-  resumeId      String
-  resume        Resume   @relation(fields: [resumeId], references: [id], onDelete: Cascade)
-  
-  jobUrl        String
-  score         Int
-  suggestions   String[]
-  matchedSkills String[]
-  missingSkills String[]
-  
-  createdAt     DateTime @default(now())
-}
-
-model ChatMessage {
-  id            String   @id @default(uuid())
-  userId        String
-  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
-  role          String   // 'user' or 'assistant'
-  content       String
-  
-  createdAt     DateTime @default(now())
 }
