@@ -14,7 +14,7 @@ router.post(
     body('fullName').trim().notEmpty(),
     validate
   ],
-  authController.signup
+  authController.signup.bind(authController)
 )
 
 router.post(
@@ -24,9 +24,9 @@ router.post(
     body('password').notEmpty(),
     validate
   ],
-  authController.login
+  authController.login.bind(authController)
 )
 
-router.post('/refresh-token', authController.refreshToken)
+router.post('/refresh-token', authController.refreshToken.bind(authController))
 
 export default router

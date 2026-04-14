@@ -3,6 +3,8 @@ import cors from 'cors'
 import helmet from 'helmet'
 import dotenv from 'dotenv'
 import rateLimit from 'express-rate-limit'
+import authRoutes from './routes/auth.routes'
+import { errorHandler } from './middleware/errorHandler'
 
 dotenv.config()
 
@@ -45,28 +47,24 @@ app.get('/', (req, res) => {
   })
 })
 
-// API Routes (will add these)
-app.use('/api/auth', (req, res) => {
-  res.json({ message: 'Auth routes coming soon' })
-})
+// API Routes
+app.use('/api/auth', authRoutes)
 
-app.use('/api/users', (req, res) => {
+// Placeholder routes
+app.get('/api/users', (req, res) => {
   res.json({ message: 'User routes coming soon' })
 })
 
-app.use('/api/resume', (req, res) => {
+app.get('/api/resume', (req, res) => {
   res.json({ message: 'Resume routes coming soon' })
 })
 
-app.use('/api/jobs', (req, res) => {
+app.get('/api/jobs', (req, res) => {
   res.json({ message: 'Job routes coming soon' })
 })
 
 // Error handling
-app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
-  console.error(err.stack)
-  res.status(500).json({ error: 'Something went wrong!' })
-})
+app.use(errorHandler)
 
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`)

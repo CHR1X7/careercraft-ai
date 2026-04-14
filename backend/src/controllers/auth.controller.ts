@@ -32,7 +32,7 @@ export class AuthController {
       // Generate token
       const token = jwt.sign(
         { userId: user.id, email: user.email },
-        process.env.JWT_SECRET!,
+        process.env.JWT_SECRET || 'fallback-secret',
         { expiresIn: '7d' }
       )
 
@@ -71,7 +71,7 @@ export class AuthController {
       // Generate token
       const token = jwt.sign(
         { userId: user.id, email: user.email },
-        process.env.JWT_SECRET!,
+        process.env.JWT_SECRET || 'fallback-secret',
         { expiresIn: '7d' }
       )
 
@@ -92,7 +92,6 @@ export class AuthController {
   }
 
   async refreshToken(req: Request, res: Response) {
-    // Implementation for token refresh
-    res.json({ message: 'Token refreshed' })
+    res.json({ message: 'Token refresh not implemented yet' })
   }
 }
