@@ -8,12 +8,21 @@ import { Briefcase, Mail, Lock, User, ArrowRight } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { authService } from '@/services/api'
 
+type SignupForm = {
+  fullName: string
+  email: string
+  password: string
+  confirmPassword: string
+}
+
 export default function SignupPage() {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
-  const { register, handleSubmit, watch, formState: { errors } } = useForm<any>()
+  const { register, handleSubmit, watch, formState: { errors } } = useForm<SignupForm>()
 
-  const onSubmit = async (data: any) => {
+  const password = watch('password')
+
+  const onSubmit = async (data: SignupForm) => {
     if (data.password !== data.confirmPassword) {
       toast.error('Passwords do not match')
       return
@@ -26,8 +35,8 @@ export default function SignupPage() {
         email: data.email,
         password: data.password
       })
-      toast.success('Account created successfully!')
-      router.push('/') // Redirect to home/dashboard
+      toast.success('Account created!')
+      router.push('/')
     } catch (error: any) {
       toast.error(error.response?.data?.error || 'Failed to create account')
     } finally {
@@ -49,7 +58,7 @@ export default function SignupPage() {
         </div>
         
         <h2 className="text-3xl font-bold text-center text-gray-900 mb-2">Create Account</h2>
-        <p className="text-gray-500 text-center mb-8">Join CareerCraft AI today</p>
+        <p className="text-gray-500 text-center mb-8">Join CareerCraft AI</p>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
           <div>
@@ -57,27 +66,27 @@ export default function SignupPage() {
             <div className="relative">
               <User className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
               <input
-                {...register('fullName', { required: 'Name is required' })}
+                {...register('fullName', { required: 'Name required' })}
                 type="text"
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
                 placeholder="John Doe"
               />
             </div>
-            {errors.fullName && <p className="text-red-500 text-xs mt-1">{errors.fullName.message as string}</p>}
+            {errors.fullName && <p className="text-red-500 text-xs mt-1">{errors.fullName.message}</p>}
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
             <div className="relative">
               <Mail className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
               <input
-                {...register('email', { required: 'Email is required' })}
+                {...register('email', { required: 'Email required' })}
                 type="email"
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
                 placeholder="you@example.com"
               />
             </div>
-            {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email.message as string}</p>}
+            {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>}
           </div>
 
           <div>
@@ -85,13 +94,13 @@ export default function SignupPage() {
             <div className="relative">
               <Lock className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
               <input
-                {...register('password', { required: 'Password is required', minLength: { value: 8, message: 'Min 8 characters' } })}
+                {...register('password', { required: 'Password required', minLength: { value: 8, message: 'Min 8 chars' } })}
                 type="password"
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
                 placeholder="••••••••"
               />
             </div>
-            {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password.message as string}</p>}
+            {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password.message}</p>}
           </div>
 
           <div>
@@ -99,9 +108,9 @@ export default function SignupPage() {
             <div className="relative">
               <Lock className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
               <input
-                {...register('confirmPassword', { required: 'Please confirm password' })}
+                {...register('confirmPassword', { required: 'Confirm password' })}
                 type="password"
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
                 placeholder="••••••••"
               />
             </div>
@@ -112,13 +121,13 @@ export default function SignupPage() {
             disabled={isLoading}
             className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 disabled:opacity-70"
           >
-            {isLoading ? 'Creating Account...' : 'Sign Up'}
+            {isLoading ? 'Creating...' : 'Sign Up'}
             {!isLoading && <ArrowRight className="w-5 h-5" />}
           </button>
         </form>
 
         <p className="text-center text-gray-600 mt-6">
-          Already have an account?{' '}
+          Have an account?{' '}
           <button onClick={() => router.push('/login')} className="text-blue-600 font-semibold hover:underline">
             Sign In
           </button>
