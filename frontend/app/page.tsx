@@ -2,7 +2,16 @@
 
 import { useRouter } from 'next/navigation'
 import { useAuth, SignInButton, SignUpButton, UserButton } from '@clerk/nextjs'
-import { Briefcase, ArrowRight, FileText, Target, Sparkles, TrendingUp, Users, CheckCircle } from 'lucide-react'
+import {
+  Briefcase,
+  ArrowRight,
+  FileText,
+  Target,
+  Sparkles,
+  TrendingUp,
+  Users,
+  CheckCircle,
+} from 'lucide-react'
 
 export default function Home() {
   const router = useRouter()
@@ -28,7 +37,10 @@ export default function Home() {
           <div className="flex gap-4 items-center">
             {isSignedIn ? (
               <>
-                <button onClick={() => router.push('/dashboard')} className="px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700">
+                <button
+                  onClick={() => router.push('/dashboard')}
+                  className="px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700"
+                >
                   Dashboard
                 </button>
                 <UserButton afterSignOutUrl="/" />
@@ -36,7 +48,9 @@ export default function Home() {
             ) : (
               <>
                 <SignInButton mode="modal">
-                  <button className="px-6 py-2 rounded-lg font-semibold hover:bg-gray-100">Sign In</button>
+                  <button className="px-6 py-2 rounded-lg font-semibold hover:bg-gray-100">
+                    Sign In
+                  </button>
                 </SignInButton>
                 <SignUpButton mode="modal">
                   <button className="px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700">
@@ -56,11 +70,14 @@ export default function Home() {
             <span className="text-blue-600"> AI-Powered</span> Precision
           </h1>
           <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
-            CareerCraft AI streamlines your job search with intelligent resume optimization, 
+            CareerCraft AI streamlines your job search with intelligent resume optimization,
             personalized applications, and real-time job matching powered by advanced AI.
           </p>
           {isSignedIn ? (
-            <button onClick={() => router.push('/dashboard')} className="px-8 py-4 bg-blue-600 text-white rounded-lg font-semibold text-lg hover:bg-blue-700 inline-flex items-center gap-2">
+            <button
+              onClick={() => router.push('/dashboard')}
+              className="px-8 py-4 bg-blue-600 text-white rounded-lg font-semibold text-lg hover:bg-blue-700 inline-flex items-center gap-2"
+            >
               Go to Dashboard <ArrowRight className="w-5 h-5" />
             </button>
           ) : (
@@ -108,7 +125,10 @@ export default function Home() {
             Join thousands of professionals who've found their dream jobs with CareerCraft AI
           </p>
           {isSignedIn ? (
-            <button onClick={() => router.push('/dashboard')} className="px-8 py-4 bg-white text-blue-600 rounded-lg font-semibold text-lg hover:bg-gray-100">
+            <button
+              onClick={() => router.push('/dashboard')}
+              className="px-8 py-4 bg-white text-blue-600 rounded-lg font-semibold text-lg hover:bg-gray-100"
+            >
               Go to Dashboard
             </button>
           ) : (
