@@ -14,7 +14,8 @@ import {
   Shield,
   Zap,
   CheckCircle,
-  Star
+  Star,
+  Search
 } from 'lucide-react'
 
 export default function Home() {
@@ -132,7 +133,7 @@ export default function Home() {
                 </SignInButton>
                 <SignUpButton mode="modal">
                   <button className="px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors text-sm">
-                    Get Started Free
+                    Get Started
                   </button>
                 </SignUpButton>
               </>
@@ -151,7 +152,7 @@ export default function Home() {
           >
             <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-700 px-4 py-2 rounded-full mb-6 text-sm font-semibold">
               <Zap className="w-4 h-4" />
-              Powered by Advanced AI (Groq + Mixtral)
+              Powered by Advanced AI
             </div>
 
             <h1 className="text-5xl md:text-6xl font-extrabold text-gray-900 mb-6 leading-tight">
@@ -174,56 +175,25 @@ export default function Home() {
                   Go to Dashboard <ArrowRight className="w-5 h-5" />
                 </button>
               ) : (
-                <>
-                  <SignUpButton mode="modal">
-                    <button className="px-8 py-4 bg-blue-600 text-white rounded-xl font-bold text-lg hover:bg-blue-700 transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2">
-                      Start Your Journey <ArrowRight className="w-5 h-5" />
-                    </button>
-                  </SignUpButton>
-                  <SignInButton mode="modal">
-                    <button className="px-8 py-4 bg-white text-gray-700 rounded-xl font-bold text-lg hover:bg-gray-50 transition-all shadow-md border border-gray-200 flex items-center justify-center gap-2">
-                      <Shield className="w-5 h-5 text-blue-600" /> Sign In Securely
-                    </button>
-                  </SignInButton>
-                </>
+                <SignUpButton mode="modal">
+                  <button className="px-8 py-4 bg-blue-600 text-white rounded-xl font-bold text-lg hover:bg-blue-700 transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2">
+                    Start Your Journey <ArrowRight className="w-5 h-5" />
+                  </button>
+                </SignUpButton>
               )}
             </div>
 
-            <div className="mt-6 flex items-center justify-center gap-6 text-sm text-gray-500">
+            <div className="mt-6 flex flex-wrap items-center justify-center gap-6 text-sm text-gray-500">
               <div className="flex items-center gap-1">
                 <CheckCircle className="w-4 h-4 text-green-500" />
                 No credit card required
               </div>
               <div className="flex items-center gap-1">
                 <CheckCircle className="w-4 h-4 text-green-500" />
-                Google & GitHub login
-              </div>
-              <div className="flex items-center gap-1">
-                <CheckCircle className="w-4 h-4 text-green-500" />
-                100% Free to start
+                Secure with Google & GitHub
               </div>
             </div>
           </motion.div>
-        </div>
-      </section>
-
-      {/* Stats Section */}
-      <section className="py-16 bg-blue-600">
-        <div className="container mx-auto px-6">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {stats.map((stat, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-                className="text-center text-white"
-              >
-                <div className="text-4xl font-extrabold mb-1">{stat.value}</div>
-                <div className="text-blue-200 text-sm">{stat.label}</div>
-              </motion.div>
-            ))}
-          </div>
         </div>
       </section>
 
@@ -235,7 +205,7 @@ export default function Home() {
               Everything You Need to Succeed
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              All the tools you need to find, apply, and land your perfect job — in one platform.
+              All the tools to find, apply, and land your perfect job.
             </p>
           </div>
 
@@ -246,97 +216,13 @@ export default function Home() {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
-                className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 cursor-pointer group"
+                className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100"
               >
-                <div className={`w-14 h-14 rounded-xl flex items-center justify-center mb-5 ${feature.color} group-hover:scale-110 transition-transform`}>
+                <div className={`w-14 h-14 rounded-xl flex items-center justify-center mb-5 ${feature.color}`}>
                   {feature.icon}
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 mb-2">{feature.title}</h3>
                 <p className="text-gray-600 leading-relaxed">{feature.description}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* How It Works Section */}
-      <section id="how-it-works" className="py-24 bg-white">
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-extrabold text-gray-900 mb-4">
-              How It Works
-            </h2>
-            <p className="text-gray-600 text-xl max-w-2xl mx-auto">
-              Get started in minutes and land more interviews.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-            {[
-              {
-                step: '1',
-                title: 'Create Your Profile',
-                description: 'Sign up with Google or GitHub. Tell us about your skills, experience, and dream job.',
-                icon: <Users className="w-8 h-8" />
-              },
-              {
-                step: '2',
-                title: 'Paste a Job URL',
-                description: 'Our AI scrapes the job posting and analyzes exactly what the employer wants.',
-                icon: <Search className="w-8 h-8" />
-              },
-              {
-                step: '3',
-                title: 'Get AI Insights',
-                description: 'Receive a match score, missing skills, and AI-generated tailored content.',
-                icon: <Sparkles className="w-8 h-8" />
-              }
-            ].map((item, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.2 }}
-                className="text-center"
-              >
-                <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center text-white mx-auto mb-4">
-                  {item.icon}
-                </div>
-                <div className="text-sm font-bold text-blue-600 mb-2">STEP {item.step}</div>
-                <h3 className="text-xl font-bold text-gray-900 mb-3">{item.title}</h3>
-                <p className="text-gray-600">{item.description}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Testimonials Section */}
-      <section id="testimonials" className="py-24 bg-gray-50">
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-extrabold text-gray-900 mb-4">
-              People Love CareerCraft AI
-            </h2>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            {testimonials.map((t, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-                className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100"
-              >
-                <div className="flex mb-3">
-                  {[...Array(t.rating)].map((_, i) => (
-                    <Star key={i} className="w-5 h-5 text-yellow-400 fill-yellow-400" />
-                  ))}
-                </div>
-                <p className="text-gray-700 mb-4 italic">"{t.text}"</p>
-                <div className="font-bold text-gray-900">{t.name}</div>
-                <div className="text-sm text-gray-500">{t.role}</div>
               </motion.div>
             ))}
           </div>
@@ -354,20 +240,19 @@ export default function Home() {
               Ready to Transform Your Job Search?
             </h2>
             <p className="text-xl text-blue-100 mb-10 max-w-2xl mx-auto">
-              Join thousands of professionals who've found their dream jobs with CareerCraft AI.
-              It's completely free to get started!
+              Join thousands of professionals who've found their dream jobs with CareerCraft AI
             </p>
             {isSignedIn ? (
               <button
                 onClick={() => router.push('/dashboard')}
                 className="px-10 py-4 bg-white text-blue-600 rounded-xl font-bold text-lg hover:bg-blue-50 transition-all shadow-xl"
               >
-                Go to Dashboard →
+                Go to Dashboard
               </button>
             ) : (
               <SignUpButton mode="modal">
                 <button className="px-10 py-4 bg-white text-blue-600 rounded-xl font-bold text-lg hover:bg-blue-50 transition-all shadow-xl">
-                  Get Started Free →
+                  Get Started Free
                 </button>
               </SignUpButton>
             )}
@@ -376,53 +261,17 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white py-16">
-        <div className="container mx-auto px-6">
-          <div className="grid md:grid-cols-4 gap-8 mb-10">
-            <div className="md:col-span-2">
-              <div className="flex items-center space-x-2 mb-4">
-                <div className="bg-blue-600 p-1.5 rounded-lg">
-                  <Briefcase className="w-5 h-5 text-white" />
-                </div>
-                <span className="text-xl font-bold">CareerCraft AI</span>
-              </div>
-              <p className="text-gray-400 max-w-sm">
-                The AI-powered job search platform that helps you land your dream job faster.
-              </p>
-            </div>
-            <div>
-              <h4 className="font-bold mb-4 text-gray-200">Product</h4>
-              <ul className="space-y-2 text-gray-400 text-sm">
-                <li className="hover:text-white cursor-pointer">Resume Builder</li>
-                <li className="hover:text-white cursor-pointer">Job Matching</li>
-                <li className="hover:text-white cursor-pointer">AI Coach</li>
-                <li className="hover:text-white cursor-pointer">Application Tracker</li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-bold mb-4 text-gray-200">Company</h4>
-              <ul className="space-y-2 text-gray-400 text-sm">
-                <li className="hover:text-white cursor-pointer">About</li>
-                <li className="hover:text-white cursor-pointer">Privacy Policy</li>
-                <li className="hover:text-white cursor-pointer">Terms of Service</li>
-                <li className="hover:text-white cursor-pointer">Contact</li>
-              </ul>
-            </div>
+      <footer className="bg-gray-900 text-white py-12">
+        <div className="container mx-auto px-6 text-center">
+          <div className="flex items-center justify-center space-x-2 mb-4">
+            <Briefcase className="w-6 h-6" />
+            <span className="text-xl font-bold">CareerCraft AI</span>
           </div>
-          <div className="border-t border-gray-800 pt-8 text-center text-gray-500 text-sm">
-            © 2024 CareerCraft AI. All rights reserved. Built with ❤️ using Next.js, Clerk & Groq AI.
-          </div>
+          <p className="text-gray-400">
+            © 2024 CareerCraft AI. All rights reserved.
+          </p>
         </div>
       </footer>
     </div>
-  )
-}
-
-// Search icon
-function Search(props: any) {
-  return (
-    <svg {...props} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
-    </svg>
   )
 }
