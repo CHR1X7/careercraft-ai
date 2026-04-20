@@ -147,7 +147,7 @@ export default function Home() {
             <Briefcase className="w-6 h-6" />
             <span className="text-xl font-bold">CareerCraft AI</span>
           </div>
-          <p className="text-gray-400">© 2024 CareerCraft AI. All rights reserved.</p>
+          <p className="text-gray-400">© 2026 CareerCraft AI. All rights reserved.</p>
         </div>
       </footer>
     </div>
