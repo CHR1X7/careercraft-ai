@@ -54,7 +54,7 @@ model Job {
   company       String
   description   String
   location      String
-  url           String
+  url           String   @unique
   
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt

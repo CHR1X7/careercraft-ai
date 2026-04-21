@@ -4,7 +4,11 @@ import helmet from 'helmet'
 import dotenv from 'dotenv'
 import rateLimit from 'express-rate-limit'
 import authRoutes from './routes/auth.routes'
+import userRoutes from './routes/user.routes'
+import resumeRoutes from './routes/resume.routes'
+import applicationRoutes from './routes/application.routes'
 import { errorHandler } from './middleware/errorHandler'
+import { logger } from './utils/logger'
 
 dotenv.config()
 
@@ -49,26 +53,17 @@ app.get('/', (req, res) => {
 
 // API Routes
 app.use('/api/auth', authRoutes)
-
-// Placeholder routes
-app.get('/api/users', (req, res) => {
-  res.json({ message: 'User routes coming soon' })
-})
-
-app.get('/api/resume', (req, res) => {
-  res.json({ message: 'Resume routes coming soon' })
-})
-
-app.get('/api/jobs', (req, res) => {
-  res.json({ message: 'Job routes coming soon' })
-})
+app.use('/api/users', userRoutes)
+app.use('/api/resume', resumeRoutes)
+app.use('/api/applications', applicationRoutes)
 
 // Error handling
 app.use(errorHandler)
 
 app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`)
-  console.log(`📝 Environment: ${process.env.NODE_ENV || 'development'}`)
+  logger.info(`🚀 Server running on port ${PORT}`)
+  logger.info(`📝 Environment: ${process.env.NODE_ENV || 'development'}`)
+})
 })
 
 export default app
