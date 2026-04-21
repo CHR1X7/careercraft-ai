@@ -77,7 +77,7 @@ export default function Dashboard() {
               <p className="text-white font-semibold">{user?.firstName}</p>
               <p className="text-blue-200 text-sm">{user?.emailAddresses[0]?.emailAddress}</p>
             </div>
-            <UserButton afterSignOutUrl="/" appearance={{ baseTheme: 'dark' }} />
+            <UserButton afterSignOutUrl="/" />
           </div>
         </div>
       </nav>
