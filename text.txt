@@ -1,0 +1,483 @@
+Project Overview: AI-Powered Job Application Assistant
+Welcome to your first AI project!
+This assignment challenges you to build an AI-Powered Job Application Assistant.
+Vision: To build a tool that fundamentally streamlines the job application process, giving users back their
+time and providing them with an AI-powered co-pilot to land their dream job. Please see if you can make
+this browser extension or web-application rather than a desktop solution.
+Core Features (The "What"):
+1. Autofill Agent: Securely stores a user's profile information (name, contact info, work history,
+education, etc.) and intelligently fills out application forms across different websites.
+2. Resume-to-JD Scoring Agent: Analyzes a user's uploaded resume against a specific job
+description (JD), provides a "match score," and generates actionable insights on how to tailor their
+resume to better fit the role.
+3. Tailored Answer Agent: Analyzes the job description and the user's profile to generate
+high-quality, personalized answers to common application questions like, "Why are you a good fit
+for this role?" or "What is your biggest strength?".
+4. Dashboard : The ability for a single screen to be able to walk the user(s) through where their
+application has been. Potential values: Not Submitted yet, Submitted, Received initial Response,
+Interview Requested, Rejected after Interview, Onsite/Video Interview Requested, etc.. (feel free
+to come up with this as you see fit)
+Various Role Involvement: Each role (Data Scientist, Frontend Engineer, Backend Engineer) has
+distinct responsibilities. See the tabs on the left side for role specific assignments.
+● Frontend Engineers (The User's Champion): You are in charge of the entire user experience.
+Your goal is to create an intuitive, trustworthy, and even delightful interface for our users to interact
+with the AI agents. You will bring the "magic" to life.
+● Backend Engineers (The Engine & Infrastructure): You should try to build the robust and
+scalable systems that power the entire application. You'll create the APIs, manage data, and
+ensure the AI agents can be deployed, monitored, and maintained effectively. You are the
+architects of the system.
+● Data Scientists (The Intelligence): You will design and build the core intelligence of the
+product—the AI agents themselves. You will work on scraping data, structuring prompts for Large
+Language Models (LLMs), and processing the results to deliver valuable insights to the user.
+Key Concepts to Understand:
+● AI Agent: Think of an agent not just as an AI model, but as a system that can perceive its
+environment, reason about a goal, and take actions to achieve it. In our case, an agent's goal
+might be "analyze this resume against this job description," and its actions would be to use tools
+like a web scraper and an LLM.
+● LLM (Large Language Model): This is the "brain" of your agent (e.g., GPT-4, Gemini). It's a
+powerful reasoning and text-generation engine. We don't train the model itself; we learn how to
+communicate with it effectively.
+● Prompt Engineering: This is the skill of crafting precise instructions (prompts) to get the desired
+output from an LLM. A well-designed prompt is the difference between a useless response and a
+highly effective one. This is a responsibility for everyone, not just the data scientists.
+● Tool Use: This is a core agentic design pattern. An agent doesn't do everything by itself. It uses
+"tools"—which are just functions you write—to interact with the outside world. For this project, your
+key tools will be:
+○ A web scraper to get data from a job posting URL.
+○ A database function to retrieve a user's profile.
+● Structured Output (JSON): For an application to work reliably, the LLM can't just return random
+text. We must force it to respond in a predictable format like JSON. This is done through prompt
+engineering and is the critical "contract" between the data science logic and the backend server.
+● API (Application Programming Interface): This is the set of rules and endpoints that the
+backend provides so the frontend can communicate with it. It's the connective tissue of the entire
+project. For example, the frontend will make an API call to POST /api/resume/analyze to
+trigger the analysis agent.
+● Agentic UX (User Experience for AI): Designing for AI is different from traditional UX. Key
+principles include:
+○ Showing the work: Let the user know the agent is working on their behalf.
+○ Allowing intervention: Users must be able to edit or reject the AI's suggestions. The AI is
+a co-pilot, not the pilot.
+○ Collecting feedback: Incorporating simple feedback mechanisms is essential for knowing
+if the agent is actually helpful.
+Note: To assist with the development process, you are free to use any AI coding, feel free
+to to use Azure AI Foundry and the free DeepSeek model.
+A. YT Deploy DeepSeek R1 using Azure AI Foundry and Build a Web Chatbot | No Charges for API
+Use = https://www.youtube.com/watch?v=pj2knBX4S1w
+B. MSFT = https://azure.microsoft.com/en-us/pricing/purchase-options/azure-account [Available only to new Azure
+customers = $200 credit]
+C. MSFT Billing for Free Trial Account =
+https://learn.microsoft.com/en-us/answers/questions/2283380/billing-for-free-trial-account
+D. MSFT - DeepSeek R1 is now available on Azure AI Foundry and GitHub =
+https://azure.microsoft.com/en-us/blog/deepseek-r1-is-now-available-on-azure-ai-foundry-and-github/
+Go through all of the links above so you have a good idea
+Good luck, and remember to have fun learning!
+Helpful Resources:
+Here are some helpful resources that could be used in your journey.
+● Youtube: Google Launches an Agent SDK - Agent Development Kit
+● Youtube: Google Agent Development Kit
+○ Code: https://mer.vin/2025/05/google-adk-agents/
+● Youtube: Agent Development Kit (ADK) Masterclass: Build AI Agents & Automate Workflows
+(Beginner to Pro)
+● Youtube: Build an AI Agent From Scratch in Python - Tutorial for Beginners
+● Youtube: SmolAgents: A Smol Library to Build Agents
+● Youtube: Build Multi-Agent Systems with SmolAgents
+Office Hours (for weeks 1-3):
+● Please look for announcements in Discord for exact dates/times of Office Hours.
+● Use Office Hours to help with roadblocks rather than as a gatekeeper holding you back. This way
+you start coding and make progress while not waiting for scheduled weekly Office hour sessions.
+Point of Reference:
+Simplify is a good example of such UI/UX and features for your reference.
+● It has Chrome and Firefox extensions.
+● Feel free to go to that website for UI/UX inspiration.
+Screens during onboarding asking about Prefences:
+What kinds of roles are you interested in?
+Select up to 5
+Q Search by job title
+Technical & Engineering
+Aerospace Engineering
+Data & Analytics
+Electrical Engineering
+IT & Security
+Quantitative Finance
+Al & Machine Learning
+Developer Relations
+Architecture & Civil Engineering
+DevOps & Infrastructure
+Engineering Management
+Mechanical Engineering
+Software Engineering
+Quantum Computing
+Finance & Operations & Strategy
+Hardware Engineering
+Process Engineering QA & Testing
+Sales & Solution Engineering
+Accounting Business & Strategy Consulting Finance & Banking
+Growth & Marketing
+Sales & Account Management
+Operations & Logistics Product Real Estate Retail
+Creative & Design
+Art, Graphics & Animation Audio & Sound Design Content &Writing
+Creative Production Journalism Social Media UI/UX & Design
+Education & Training
+Education Training
+Legal & Support & Administration
+Administrative & Executive Assistance Clerical & Data Entry
+Customer Experience & Support Legal & Compliance People & HR
+Security & Protective Services
+Life Sciences
+Biology & Biotech Lab & Research Medical, Clinical & Veterinary
+Michael, Founder
+Choose specializations to refine your preferences! We'll show
+you job matches to your specializations first, and then your
+general role types.
+Al & Machine Learning (Select the most relevant specializations for you)
+Al Research
+☐ Computer Vision
+Deep Learning
+Applied Machine Learning
+Conversational Al & Chatbots
+Natural Language Processing (NLP)
+Robotics & Autonomous Systems Speech Recognition
+Save and Continue
+PM Accelerator
+United States
+Atlanta
+←BACK 33%
+Where would you like to work?
+Austin
+Baltimore Boston
+Charlotte Chicago
+Dallas Denver
+Las Vegas Los Angeles
+Miami New York City
+Philadelphia Phoenix
+Portland Remote in USA
+San Diego
+Seattle
+San Francisco Bay Area
+Washington D.C.
++ Add Location
+Canada
+Montreal
+Quebec City
+Toronto
+Winnipeg
++ Add Location
+United Kingdom
+Birmingham
+London
+Remote in UK
++ Add Location
+Australia
+Remote
+Ottawa
+Select all in United States
+Remote
+Select all in Canada
+Remote in Canada Remote
+Vancouver
+Liverpool
+Manchester
+Save and Continue →
+Select all in United Kingdom
+Π Select all in Australia
+PM Accelerator
+Internship
+← BACK 40%
+What level of roles are you looking for?
+Select up to 2
+Entry Level & New Grad
+Junior (1 to 2 years)
+Mid-level (3 to 4 years)
+Senior (5 to 8 years)
+Expert & Leadership (9+ years)
+Are you looking for a specific leadership role?
+Individual Contributor
+Manager
+I don't have a preference
+Save and Continue
+Internship
+← BACK 40%
+What level of roles are you looking for?
+Select up to 2
+Entry Level & New Grad
+Junior (1 to 2 years)
+Mid-level (3 to 4 years)
+Senior (5 to 8 years)
+Expert & Leadership (9+ years)
+Save and Continue
+PM Accelerator
+1-10 employees
+← BACK 50%
+What is your ideal company size?
+51-200 employees
+501-1,000 employees
+5,001-10,000 employees
+Unselect all sizes
+11-50 employees
+201-500 employees
+1,001-5,000 employees
+10,001+ employees
+Save and Continue
+PM Accelerator
+← BACK 60%
+What industries are exciting to you?
+✔ First, what industries are exciting to you?
+Aerospace Al & Machine Learning
+Automotive & Transportation
+Consumer Goods
+Cybersecurity
+Education
+Financial Services
+Energy
+Biotechnology
+Consumer Software
+Data & Analytics
+Fintech
+Consulting
+Crypto & Web3
+Defense
+Enterprise Software
+Government & Public Sector
+Industrial & Manufacturing
+Real Estate
+Food & Agriculture
+Hardware
+Legal
+Robotics & Automation
+Venture Capital
+Design
+Entertainment
+Gaming
+Healthcare
+Quantitative Finance
+VR & AR
+Social Impact
+Second, are there any industries you don't want to work in?
+Aerospace Al & Machine Learning
+Automotive & Transportation Consulting
+Consumer Goods
+Cybersecurity
+Education
+Entertainment
+Food & Agriculture
+Hardware
+Legal
+Biotechnology
+Consumer Software
+Data & Analytics
+Energy
+Crypto & Web3
+Defense
+Enterprise Software
+Financial Services
+Gaming
+Healthcare
+Fintech
+Design
+Government & Public Sector
+Industrial & Manufacturing
+Quantitative Finance
+Robotics & Automation Social Impact
+VR & AR
+Real Estate
+Venture Capital
+Save and Continue
+PM Accelerator
+← BACK 80%
+What is your minimum expected salary?
+Michael, Founder
+We'll only use this to match you with jobs and will not share this data
+At least
+$ok
+USD
+Save and Continue
+BACK 70%
+What skills do you have or enjoy working with?
+Select all that applies
+Heart a skill indicate that you'd prefer roles that utilize that skill!
+Search all skills...
+Business Analytics Excel/Numbers/Sheets Git HTML/CSS Java MailChimp MATLAB
+Operations Research Python SEO Zendesk
+Selected skills
+Skills to filter out
+Adobe Illustrator x
+Are there any skills you don't want to work with?
+Save and Continue
+PM Accelerator
+Results of Job Search example below:
+Same as above but focused on the Overview portion:
+Overview Company Already Applied? Save Apply
+Full-Time
+Al Engineer
+Confirmed live in the last 24 hours
+Unlock job analytics with Simplify+
+P Summary Full Job Posting
+You match the following Siena Al's candidate preferences
+Employers are more likely to interview you if you match
+these preferences:
+S
+Siena AI
+51-200 employees
+Degree Experience
+Autonomous Al customer service platform
+for e-commerce
+No salary listed
+Mid, Senior
+London, UK + 2 more
+More locations: Toronto, ON, Canada |
+Paris, France
+Category
+Applied Machine Learning
+Natural Language Processing (NLP)
+Al & Machine Learning
+Required Skills
+LLM Machine Learning
+Get referrals
+You have ways to get a Siena Al
+referral from your network.
+Applications through a referral
+are 3x more likely to get an
+interview!
+Requirements
+You have ways to get a Siena Al referral from
+your network. Get referrals →
+Substantial experience (3+ years) in building Al products using
+LLMs, embeddings, or other ML natural language technologies
+Comprehensive problem-solving approach
+Skilled in conveying intricate technical ideas clearly and
+collaborating effectively with both engineering peers and nontechnical team members
+Prioritizing projects based on their business impact and being
+attuned to how work affects real people's lives
+Responsibilities
+Lead the development and experimentation of new Al features
+Successfully integrate and deploy new Al technologies into our
+core product, enhancing our customer service solutions
+Work closely with cross-functional teams to ensure timely
+delivery of Al-driven product features
+Keep abreast of the latest developments in Al, especially in
+LLMs, to ensure Siena Al remains at the cutting edge
+Desired Qualifications
+Familiarity with our tech stack (React, TypeScript, Node.js,
+Postgres) or similar technologies
+Experience with data pipeline technologies like Spark, DBT, etc.
+A broad understanding of system architecture, from user
+interfaces to data models
+Interest or background in fields outside of technology, reflecting
+our belief in the value of diverse perspectives
+PM Accelerator
+Frontend Assignment
+Frontend Engineer Assignment
+As a Frontend Engineer, your goal is to be the user's champion. You will design and build the user
+experience for the AI Job Assistant, creating an intuitive, trustworthy, and effective interface for
+interacting with the AI agents. You will bring the "magic" of the AI to life for the user.
+Phase 1: Pre-Office Hours Preparation (1 Week)
+The goal of this phase is to move from idea to a design plan. You need to understand the unique
+challenges of designing for AI and translate that understanding into a visual and interactive blueprint for
+the application.
+Actions:
+1. Research Agentic UX: Review these resources and synthesize their key principles. How should
+an application behave when an AI is performing tasks on the user's behalf?
+○ Required Reading: Microsoft's UX Design for Agents
+○ Required Reading: Secrets of Agentic UX
+2. Map the User Journey: Create user flow diagrams to visualize how a user will interact with each
+core feature. Think step-by-step:
+○ Onboarding: How does a user securely create a profile and input their work history, skills,
+etc.?
+○ Activation: How does the user trigger the Autofill, Resume Score, or Tailored Answer agents?
+Is it a browser sidebar? A pop-up?
+○ Interaction & Feedback: How is AI-generated content (like resume suggestions or tailored
+answers) presented? How does the user approve, edit, or reject it? Crucially, how will you
+design a system for users to give feedback on the AI's quality (e.g., thumbs up/down)? This
+feedback loop is essential for improving the product.
+3. Create Low-Fidelity Wireframes: Using a tool like Figma, Balsamiq, or even just pen and paper,
+sketch out the primary UI components.
+○ Profile/Settings Screen: Where the user's data lives.
+○ Main Assistant Interface: The primary view when the assistant is active on a job page.
+○ Resume Score Modal/View: The dashboard showing the match score and improvement tips.
+1
+○ Generated Answer Component: The UI for showing suggested text and allowing the user to
+copy or edit it.
+Office Hours (optional):
+Use Office Hours to help with roadblocks rather than as a gatekeeper holding you back. This way you
+can start developing your code to make progress and no longer wait for Office hours.
+Some things to think about:
+● Think through your user flow and potentially create a small wireframe to help you think through
+screens.
+● What could be some challenges you anticipate in implementing this design.
+🏆Phase 2: Development
+Can start development even if not attend Office hours. Start focusing on aligning on the UX, your focus
+shifts to implementing the Discord bot interface using ReactJS/NextJS.
+Actions:
+Set Up the Project Environment: Initialize a new React.js or Next.js application. Set up your folder
+structure for components, services, and styles.
+Build Static Components: Translate your wireframes into static React components. Focus on a
+clean, modern look and feel. Do not worry about connecting to APIs yet; you can use
+mock/dummy data to populate the UI.
+● Build the User Profile Form.
+● Build the Resume Analyzer component.
+● Build the Generated Answer component.
+Implement State Management: Use React Hooks (useState, useEffect, useContext) to manage
+the application's state.
+Create API Service Functions: Create a dedicated file (e.g., services/api.js) to house your
+fetch calls. This keeps your components clean and separates the logic for communicating with
+the backend
+Note: There are a few helpful resource videos to reference in the main Job _Assistant_Overview
+page.
+2
+Backend Assignment
+Backend Engineer Assignment
+As a Backend Engineer, you will build the engine of the AI Job Assistant. You will design and construct a
+secure, scalable, and observable system that powers the entire application. You are the architect of the
+infrastructure that enables the frontend and data science components to work together seamlessly.
+Phase 1: Preparation
+The goal of this phase is to design a robust backend architecture. You will define the technologies, data
+flows, and infrastructure needed to support the application's features now and in the future.
+Actions:
+1. Research Agentic System Design: To build a system that supports AI agents, you need to
+understand their unique requirements.
+○ Required Reading: The Agentic AI Handbook
+○ Required Reading: 4 AI Agent Strategies
+2. Design the System Architecture: Create a high-level architecture diagram using a tool like
+Lucidchart, draw.io, or even just boxes and arrows. Your diagram should show:
+○ The Client: The Frontend application.
+○ API Layer: Your Node.js/Express or Python/Flask application. Will you use an API
+Gateway?
+○ Core Logic: Where will the "agent" logic (developed by the Data Science team) plug in?
+Will it be a separate service or integrated directly?
+○ Database: Choose a database (e.g., PostgreSQL for structured data, MongoDB for
+flexibility).
+○ External Services: Show the connection to a third-party LLM API (e.g., OpenAI, Gemini).
+3. Plan for Production Operations (optional): Think beyond just writing code. How will this run in
+the real world?
+○ Deployment Strategy: Focus initially to have this running locally.
+■ Future think through: How will you package the application (e.g., Docker container)?
+Where do you plan to deploy it (e.g., AWS, Vercel, Heroku)?
+○ Logging & Observability: What tools will you use for logging API requests, errors, and
+agent activity? How will you monitor system health (e.g., a /status health check
+endpoint)?
+1
+Office Hours (optional):
+Use Office Hours to help with roadblocks rather than as a gatekeeper holding you back. This way you
+can start developing your code to make progress and no longer wait for Office hours.
+Some things to think about:
+● Your system architecture diagram.
+● What is your high-level plan for deployment and logging?
+🏆Phase 2: Development
+Can start development even if not attend Office hours. Start focusing on building the foundation. Your
+focus is on creating the API endpoints, setting up the database.
+Actions:
+1. Set Up Project & Database: Write a script to connect to your chosen database.
+2. Define Database Schemas: Based on the Data Science team's data models, create the schemas
+or models for your database
+3. Build API Endpoints: Create the core API endpoints. Initially, these can return mock data, but
+they should respect the data contracts you've agreed upon with the frontend team.
+○ POST /api/users (Create a new user profile)
+○ GET /api/users/{userId} (Fetch a user profile)
+○ POST /api/resume/analyze (The main endpoint for the resume scorer)
+○ POST /api/generate/answer (The endpoint for the tailored answer agent)
+4. Integrate Logging: Add logging to your API endpoints from day one. Log incoming requests,
+important processing steps, and especially any errors. This will be invaluable for debugging.
+Remember to start simple, and build up complexity iteratively. Good luck!
+Note: There are a few helpful resource videos to reference in the main Job _Assistant_Overview
+page.

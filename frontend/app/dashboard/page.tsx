@@ -1,6 +1,8 @@
 'use client'
 
 import { useUser, UserButton } from '@clerk/nextjs'
+import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import {
@@ -14,9 +16,39 @@ import {
   ArrowRight,
   ChevronRight
 } from 'lucide-react'
+import { userService } from '@/services/user.service'
 
 export default function Dashboard() {
   const { user } = useUser()
+  const router = useRouter()
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    const checkProfileCompletion = async () => {
+      try {
+        if (user?.id) {
+          const profile = await userService.getProfile()
+          if (profile?.profile && !profile.profile.profileCompleted) {
+            router.push('/profile')
+          }
+        }
+      } catch (error) {
+        console.error('Error checking profile:', error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    checkProfileCompletion()
+  }, [user?.id, router])
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 flex items-center justify-center">
+        <div className="text-white">Loading...</div>
+      </div>
+    )
+  }
 
   const features = [
     {

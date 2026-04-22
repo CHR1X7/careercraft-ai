@@ -9,7 +9,19 @@ export class UserController {
   async createProfile(req: Request, res: Response) {
     try {
       const userId = req.userId!
-      const { skills, experience, education, preferences } = req.body
+      const {
+        skills,
+        experience,
+        education,
+        preferences,
+        expectedSalary,
+        minCompanySize,
+        maxCompanySize,
+        preferredIndustries,
+        excludedIndustries,
+        preferredSkills,
+        excludedSkills
+      } = req.body
 
       // Check if profile exists
       const existingProfile = await prisma.userProfile.findUnique({
@@ -24,7 +36,15 @@ export class UserController {
             skills: skills || existingProfile.skills,
             experience: experience || existingProfile.experience,
             education: education || existingProfile.education,
-            preferences: preferences || existingProfile.preferences
+            preferences: preferences || existingProfile.preferences,
+            expectedSalary: expectedSalary !== undefined ? expectedSalary : existingProfile.expectedSalary,
+            minCompanySize: minCompanySize !== undefined ? minCompanySize : existingProfile.minCompanySize,
+            maxCompanySize: maxCompanySize !== undefined ? maxCompanySize : existingProfile.maxCompanySize,
+            preferredIndustries: preferredIndustries || existingProfile.preferredIndustries,
+            excludedIndustries: excludedIndustries || existingProfile.excludedIndustries,
+            preferredSkills: preferredSkills || existingProfile.preferredSkills,
+            excludedSkills: excludedSkills || existingProfile.excludedSkills,
+            profileCompleted: true
           }
         })
       } else {
@@ -34,7 +54,15 @@ export class UserController {
             skills: skills || [],
             experience: experience || [],
             education: education || [],
-            preferences: preferences || {}
+            preferences: preferences || {},
+            expectedSalary: expectedSalary || null,
+            minCompanySize: minCompanySize || null,
+            maxCompanySize: maxCompanySize || null,
+            preferredIndustries: preferredIndustries || [],
+            excludedIndustries: excludedIndustries || [],
+            preferredSkills: preferredSkills || [],
+            excludedSkills: excludedSkills || [],
+            profileCompleted: true
           }
         })
       }

@@ -7,6 +7,14 @@ export interface UserProfile {
   experience: any[]
   education: any[]
   preferences: any
+  expectedSalary?: number
+  minCompanySize?: number
+  maxCompanySize?: number
+  preferredIndustries: string[]
+  excludedIndustries: string[]
+  preferredSkills: string[]
+  excludedSkills: string[]
+  profileCompleted: boolean
   createdAt: string
   updatedAt: string
 }
@@ -27,6 +35,13 @@ export const userService = {
     experience?: any[]
     education?: any[]
     preferences?: any
+    expectedSalary?: number | null
+    minCompanySize?: number | null
+    maxCompanySize?: number | null
+    preferredIndustries?: string[]
+    excludedIndustries?: string[]
+    preferredSkills?: string[]
+    excludedSkills?: string[]
   }) {
     const response = await apiClient.post('/users/profile', data)
     return response.data

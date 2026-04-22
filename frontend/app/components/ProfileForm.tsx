@@ -5,18 +5,42 @@ import { motion } from 'framer-motion'
 import { Save, Plus, X } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { userService } from '@/services/user.service'
+
 interface Experience {
   company: string
   position: string
   duration: string
   description: string
 }
+
 interface Education {
   school: string
   degree: string
   field: string
   year: string
 }
+
+const industries = [
+  'Aerospace', 'AI & Machine Learning', 'Automotive & Transportation', 'Consumer Goods',
+  'Cybersecurity', 'Education', 'Financial Services', 'Energy', 'Biotechnology',
+  'Consumer Software', 'Data & Analytics', 'Fintech', 'Consulting', 'Crypto & Web3',
+  'Defense', 'Enterprise Software', 'Government & Public Sector', 'Industrial & Manufacturing',
+  'Real Estate', 'Food & Agriculture', 'Hardware', 'Legal', 'Robotics & Automation',
+  'Venture Capital', 'Design', 'Entertainment', 'Gaming', 'Healthcare',
+  'Quantitative Finance', 'VR & AR', 'Social Impact'
+]
+
+const companySize = [
+  { label: '1-10 employees', value: 10 },
+  { label: '11-50 employees', value: 50 },
+  { label: '51-200 employees', value: 200 },
+  { label: '201-500 employees', value: 500 },
+  { label: '501-1,000 employees', value: 1000 },
+  { label: '1,001-5,000 employees', value: 5000 },
+  { label: '5,001-10,000 employees', value: 10000 },
+  { label: '10,001+ employees', value: 999999 }
+]
+
 export default function ProfileForm() {
   const { user } = useUser()
   const [loading, setLoading] = useState(false)
@@ -38,11 +62,20 @@ export default function ProfileForm() {
     field: '',
     year: ''
   })
+  const [expectedSalary, setExpectedSalary] = useState('')
+  const [minCompanySize, setMinCompanySize] = useState<number | null>(null)
+  const [maxCompanySize, setMaxCompanySize] = useState<number | null>(null)
+  const [preferredIndustries, setPreferredIndustries] = useState<string[]>([])
+  const [excludedIndustries, setExcludedIndustries] = useState<string[]>([])
+  const [preferredSkills, setPreferredSkills] = useState<string[]>([])
+  const [excludedSkills, setExcludedSkills] = useState<string[]>([])
+
   useEffect(() => {
     if (user?.id) {
       loadProfile()
     }
   }, [user?.id])
+
   const loadProfile = async () => {
     try {
       const profile = await userService.getProfile()
@@ -50,20 +83,30 @@ export default function ProfileForm() {
         setSkills(profile.profile.skills || [])
         setExperience(profile.profile.experience || [])
         setEducation(profile.profile.education || [])
+        setExpectedSalary(profile.profile.expectedSalary || '')
+        setMinCompanySize(profile.profile.minCompanySize || null)
+        setMaxCompanySize(profile.profile.maxCompanySize || null)
+        setPreferredIndustries(profile.profile.preferredIndustries || [])
+        setExcludedIndustries(profile.profile.excludedIndustries || [])
+        setPreferredSkills(profile.profile.preferredSkills || [])
+        setExcludedSkills(profile.profile.excludedSkills || [])
       }
     } catch (error) {
       console.error('Failed to load profile:', error)
     }
   }
+
   const addSkill = () => {
     if (newSkill.trim() && !skills.includes(newSkill.trim())) {
       setSkills([...skills, newSkill.trim()])
       setNewSkill('')
     }
   }
+
   const removeSkill = (skill: string) => {
     setSkills(skills.filter((s) => s !== skill))
   }
+
   const addExperience = () => {
     if (expForm.company && expForm.position) {
       setExperience([...experience, expForm])
@@ -71,9 +114,11 @@ export default function ProfileForm() {
       setIsAddingExp(false)
     }
   }
+
   const removeExperience = (index: number) => {
     setExperience(experience.filter((_, i) => i !== index))
   }
+
   const addEducation = () => {
     if (eduForm.school && eduForm.degree) {
       setEducation([...education, eduForm])
@@ -81,9 +126,43 @@ export default function ProfileForm() {
       setIsAddingEdu(false)
     }
   }
+
   const removeEducation = (index: number) => {
     setEducation(education.filter((_, i) => i !== index))
   }
+
+  const toggleIndustry = (industry: string, type: 'preferred' | 'excluded') => {
+    if (type === 'preferred') {
+      if (preferredIndustries.includes(industry)) {
+        setPreferredIndustries(preferredIndustries.filter((i) => i !== industry))
+      } else {
+        setPreferredIndustries([...preferredIndustries, industry])
+      }
+    } else {
+      if (excludedIndustries.includes(industry)) {
+        setExcludedIndustries(excludedIndustries.filter((i) => i !== industry))
+      } else {
+        setExcludedIndustries([...excludedIndustries, industry])
+      }
+    }
+  }
+
+  const toggleSkillFilter = (skill: string, type: 'preferred' | 'excluded') => {
+    if (type === 'preferred') {
+      if (preferredSkills.includes(skill)) {
+        setPreferredSkills(preferredSkills.filter((s) => s !== skill))
+      } else {
+        setPreferredSkills([...preferredSkills, skill])
+      }
+    } else {
+      if (excludedSkills.includes(skill)) {
+        setExcludedSkills(excludedSkills.filter((s) => s !== skill))
+      } else {
+        setExcludedSkills([...excludedSkills, skill])
+      }
+    }
+  }
+
   const saveProfile = async () => {
     setLoading(true)
     const loadingToast = toast.loading('Saving profile...')
@@ -91,7 +170,14 @@ export default function ProfileForm() {
       await userService.createProfile({
         skills,
         experience,
-        education
+        education,
+        expectedSalary: expectedSalary ? parseFloat(expectedSalary) : null,
+        minCompanySize,
+        maxCompanySize,
+        preferredIndustries,
+        excludedIndustries,
+        preferredSkills,
+        excludedSkills
       })
       toast.success('Profile saved successfully!', { id: loadingToast })
     } catch (error) {
@@ -101,6 +187,7 @@ export default function ProfileForm() {
       setLoading(false)
     }
   }
+
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <motion.div
@@ -109,13 +196,14 @@ export default function ProfileForm() {
         className="max-w-4xl mx-auto"
       >
         <div className="bg-white rounded-lg shadow-lg p-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">My Profile</h1>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Complete Your Profile</h1>
           <p className="text-gray-600 mb-8">
-            Build your professional profile to get better job matches
+            Fill out your professional information to get better job matches and enable our AI to help you craft tailored applications
           </p>
+
           {/* Skills Section */}
           <div className="mb-12">
-            <h2 className="text-2xl font-semibold text-gray-800 mb-6">Skills</h2>
+            <h2 className="text-2xl font-semibold text-gray-800 mb-6">Core Skills</h2>
             <div className="space-y-4">
               <div className="flex gap-2">
                 <input
@@ -151,9 +239,10 @@ export default function ProfileForm() {
               </div>
             </div>
           </div>
+
           {/* Experience Section */}
           <div className="mb-12">
-            <h2 className="text-2xl font-semibold text-gray-800 mb-6">Experience</h2>
+            <h2 className="text-2xl font-semibold text-gray-800 mb-6">Work Experience</h2>
             <div className="space-y-4">
               {experience.map((exp, idx) => (
                 <div
@@ -230,6 +319,7 @@ export default function ProfileForm() {
               )}
             </div>
           </div>
+
           {/* Education Section */}
           <div className="mb-12">
             <h2 className="text-2xl font-semibold text-gray-800 mb-6">Education</h2>
@@ -308,6 +398,151 @@ export default function ProfileForm() {
               )}
             </div>
           </div>
+
+          {/* Salary Preferences Section */}
+          <div className="mb-12">
+            <h2 className="text-2xl font-semibold text-gray-800 mb-6">Compensation & Company</h2>
+            <div className="space-y-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Expected Minimum Salary (USD)
+                </label>
+                <input
+                  type="number"
+                  value={expectedSalary}
+                  onChange={(e) => setExpectedSalary(e.target.value)}
+                  placeholder="e.g., 100000"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                />
+                <p className="text-xs text-gray-500 mt-1">We'll only use this to match you with jobs</p>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Min Company Size
+                  </label>
+                  <select
+                    value={minCompanySize || ''}
+                    onChange={(e) => setMinCompanySize(e.target.value ? parseInt(e.target.value) : null)}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                  >
+                    <option value="">Any size</option>
+                    {companySize.map((size) => (
+                      <option key={size.value} value={size.value}>
+                        {size.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Max Company Size
+                  </label>
+                  <select
+                    value={maxCompanySize || ''}
+                    onChange={(e) => setMaxCompanySize(e.target.value ? parseInt(e.target.value) : null)}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                  >
+                    <option value="">Any size</option>
+                    {companySize.map((size) => (
+                      <option key={size.value} value={size.value}>
+                        {size.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Industries Section */}
+          <div className="mb-12">
+            <h2 className="text-2xl font-semibold text-gray-800 mb-6">Industries</h2>
+            <div className="space-y-8">
+              <div>
+                <h3 className="text-lg font-medium text-gray-700 mb-4">Industries You're Interested In</h3>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                  {industries.map((industry) => (
+                    <button
+                      key={industry}
+                      onClick={() => toggleIndustry(industry, 'preferred')}
+                      className={`p-3 rounded-lg border-2 font-medium transition text-left ${
+                        preferredIndustries.includes(industry)
+                          ? 'border-green-600 bg-green-50 text-green-700'
+                          : 'border-gray-300 text-gray-700 hover:border-gray-400'
+                      }`}
+                    >
+                      {industry}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <h3 className="text-lg font-medium text-gray-700 mb-4">Industries to Avoid</h3>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                  {industries.map((industry) => (
+                    <button
+                      key={industry}
+                      onClick={() => toggleIndustry(industry, 'excluded')}
+                      className={`p-3 rounded-lg border-2 font-medium transition text-left ${
+                        excludedIndustries.includes(industry)
+                          ? 'border-red-600 bg-red-50 text-red-700'
+                          : 'border-gray-300 text-gray-700 hover:border-gray-400'
+                      }`}
+                    >
+                      {industry}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Skills Filter Section */}
+          <div className="mb-12">
+            <h2 className="text-2xl font-semibold text-gray-800 mb-6">Skill Preferences</h2>
+            <p className="text-gray-600 mb-6">Mark skills you'd prefer to work with or want to avoid</p>
+            <div className="space-y-8">
+              <div>
+                <h3 className="text-lg font-medium text-gray-700 mb-4">Preferred Skills (Indicate skill preference)</h3>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                  {['Python', 'TypeScript', 'React', 'Node.js', 'PostgreSQL', 'AWS', 'Docker', 'Machine Learning', 'SQL', 'Git', 'JavaScript', 'Java', 'Go', 'Rust', 'Data Analysis', 'Communication'].map((skill) => (
+                    <button
+                      key={skill}
+                      onClick={() => toggleSkillFilter(skill, 'preferred')}
+                      className={`p-3 rounded-lg border-2 font-medium transition text-sm ${
+                        preferredSkills.includes(skill)
+                          ? 'border-blue-600 bg-blue-50 text-blue-700'
+                          : 'border-gray-300 text-gray-700 hover:border-gray-400'
+                      }`}
+                    >
+                      {skill}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <h3 className="text-lg font-medium text-gray-700 mb-4">Skills to Avoid</h3>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                  {['Python', 'TypeScript', 'React', 'Node.js', 'PostgreSQL', 'AWS', 'Docker', 'Machine Learning', 'SQL', 'Git', 'JavaScript', 'Java', 'Go', 'Rust', 'Data Analysis', 'Communication'].map((skill) => (
+                    <button
+                      key={skill}
+                      onClick={() => toggleSkillFilter(skill, 'excluded')}
+                      className={`p-3 rounded-lg border-2 font-medium transition text-sm ${
+                        excludedSkills.includes(skill)
+                          ? 'border-red-600 bg-red-50 text-red-700'
+                          : 'border-gray-300 text-gray-700 hover:border-gray-400'
+                      }`}
+                    >
+                      {skill}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
           {/* Save Button */}
           <button
             onClick={saveProfile}
