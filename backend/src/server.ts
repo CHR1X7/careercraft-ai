@@ -18,10 +18,24 @@ const PORT = Number(process.env.PORT) || 5000  // ✅ Convert to number
 // Security
 app.use(helmet())
 
-// CORS - allow all origins
+// CORS - allow specific origins
+const allowedOrigins = [
+  'https://careercraft-ai-aske.vercel.app',
+  'http://localhost:3000',
+  'http://localhost:5000'
+]
+
 app.use(cors({
-  origin: '*',
-  credentials: true
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true)
+    } else {
+      callback(new Error('CORS policy violation'))
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }))
 
 // Rate limiting
