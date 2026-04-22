@@ -18,7 +18,7 @@ const PORT = process.env.PORT || 5000
 // Security
 app.use(helmet())
 
-// CORS - allow all origins for now
+// CORS - allow all origins
 app.use(cors({
   origin: '*',
   credentials: true
@@ -35,7 +35,7 @@ app.use(limiter)
 app.use(express.json({ limit: '10mb' }))
 app.use(express.urlencoded({ extended: true }))
 
-// Health check
+// Health check - MUST be before routes
 app.get('/health', (req, res) => {
   res.json({ 
     status: 'OK', 
@@ -44,7 +44,7 @@ app.get('/health', (req, res) => {
   })
 })
 
-// Root endpoint
+// Root endpoint - MUST be before routes
 app.get('/', (req, res) => {
   res.json({
     message: 'CareerCraft AI Backend',
@@ -53,11 +53,11 @@ app.get('/', (req, res) => {
   })
 })
 
-// API Routes
-app.use('/', authRoutes)
-app.use('/', userRoutes)
-app.use('/', resumeRoutes)
-app.use('/', applicationRoutes)
+// API Routes - mount at DIFFERENT paths to avoid conflicts!
+app.use('/api/auth', authRoutes)
+app.use('/api/users', userRoutes)
+app.use('/api/resume', resumeRoutes)
+app.use('/api/applications', applicationRoutes)
 
 // Error handling
 app.use(errorHandler)
