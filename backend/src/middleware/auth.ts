@@ -12,9 +12,20 @@ declare global {
 }
 
 export const authenticateToken = (req: Request, res: Response, next: NextFunction) => {
+  // ✅ Allow public routes without auth
+  const publicPaths = ['/', '/health', '/api/health']
+  if (publicPaths.includes(req.path)) {
+    return next()
+  }
+
+  // ✅ Handle CORS preflight (OPTIONS) without auth
+  if (req.method === 'OPTIONS') {
+    return next()
+  }
+
   try {
     const authHeader = req.headers['authorization']
-    const token = authHeader && authHeader.split(' ')[1] // Extract token from "Bearer <token>"
+    const token = authHeader && authHeader.split(' ')[1]
 
     if (!token) {
       return res.status(401).json({ error: 'Access token required' })
@@ -29,7 +40,6 @@ export const authenticateToken = (req: Request, res: Response, next: NextFunctio
           return res.status(403).json({ error: 'Invalid or expired token' })
         }
 
-        // Attach userId to request
         req.userId = decoded.userId
         req.email = decoded.email
         next()
