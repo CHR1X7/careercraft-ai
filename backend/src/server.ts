@@ -31,7 +31,7 @@ const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 100
 })
-app.use('/api/', limiter)
+app.use(limiter)
 // Body parsing
 app.use(express.json({ limit: '10mb' }))
 app.use(express.urlencoded({ extended: true }))
@@ -51,11 +51,11 @@ app.get('/', (req, res) => {
     status: 'running'
   })
 })
-// API Routes
-app.use('/api/auth', authRoutes)
-app.use('/api/users', userRoutes)
-app.use('/api/resume', resumeRoutes)
-app.use('/api/applications', applicationRoutes)
+// API Routes - remove /api/ prefix
+app.use('/', authRoutes)        // → /auth
+app.use('/', userRoutes)        // → /users
+app.use('/', resumeRoutes)     // → /resume  ✅
+app.use('/', applicationRoutes) // → /applications
 // Error handling
 app.use(errorHandler)
 app.listen(PORT, () => {
