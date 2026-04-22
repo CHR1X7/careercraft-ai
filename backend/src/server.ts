@@ -9,44 +9,32 @@ import resumeRoutes from './routes/resume.routes'
 import applicationRoutes from './routes/application.routes'
 import { errorHandler } from './middleware/errorHandler'
 import { logger } from './utils/logger'
-
 dotenv.config()
-
 const app = express()
 const PORT = process.env.PORT || 5000
-
 // Security
 app.use(helmet())
-
-// CORS configuration - accept both localhost (development) and production URL
-const allowedOrigins = [
-  'http://localhost:3000',
-  'http://localhost:3001',
-  process.env.FRONTEND_URL
-].filter(Boolean)
-
+// CORS configuration - include all origins directly
 app.use(cors({
-  origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true)
-    } else {
-      callback(new Error('Not allowed by CORS'))
-    }
-  },
-  credentials: true
+  origin: [
+    'http://localhost:3000',
+    'http://localhost:3001',
+    'https://careercraft-ai-aske.vercel.app',
+    process.env.FRONTEND_URL
+  ].filter(Boolean),
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'Clerk-Session-Token']
 }))
-
 // Rate limiting
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 100
 })
 app.use('/api/', limiter)
-
 // Body parsing
 app.use(express.json({ limit: '10mb' }))
 app.use(express.urlencoded({ extended: true }))
-
 // Health check
 app.get('/health', (req, res) => {
   res.json({ 
@@ -55,7 +43,6 @@ app.get('/health', (req, res) => {
     service: 'CareerCraft Backend'
   })
 })
-
 // Root endpoint
 app.get('/', (req, res) => {
   res.json({
@@ -64,16 +51,13 @@ app.get('/', (req, res) => {
     status: 'running'
   })
 })
-
 // API Routes
 app.use('/api/auth', authRoutes)
 app.use('/api/users', userRoutes)
 app.use('/api/resume', resumeRoutes)
 app.use('/api/applications', applicationRoutes)
-
 // Error handling
 app.use(errorHandler)
-
 app.listen(PORT, () => {
   logger.info(`🚀 Server running on port ${PORT}`)
   logger.info(`📝 Environment: ${process.env.NODE_ENV || 'development'}`)
