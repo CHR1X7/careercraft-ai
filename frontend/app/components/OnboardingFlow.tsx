@@ -88,7 +88,7 @@ export default function OnboardingFlow() {
 
     setLoading(true)
     try {
-      await userService.updatePreferences(user.id, {
+      await userService.updatePreferences({
         preferredRoles: data.roles,
         preferredLocations: data.locations,
         experienceLevels: data.experience,

@@ -24,7 +24,7 @@ export default function TailoredAnswersPage() {
   const loadApplications = async () => {
     try {
       if (!user?.id) return
-      const data = await applicationService.getUserApplications(user.id)
+      const data = await applicationService.getUserApplications()
       setApplications(data)
       if (data.length > 0) {
         setSelectedApp(data[0])

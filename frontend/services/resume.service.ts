@@ -22,9 +22,8 @@ export interface ResumeAnalysis {
 
 export const resumeService = {
   // Create resume
-  async createResume(userId: string, title: string, content: string) {
+  async createResume(title: string, content: string) {
     const response = await apiClient.post('/resume', {
-      userId,
       title,
       content
     })
@@ -32,15 +31,14 @@ export const resumeService = {
   },
 
   // Get user resumes
-  async getUserResumes(userId: string) {
-    const response = await apiClient.get(`/resume/user/${userId}`)
+  async getUserResumes() {
+    const response = await apiClient.get('/resume')
     return response.data
   },
 
   // Analyze resume against job
-  async analyzeResume(userId: string, resumeId: string, jobUrl: string) {
+  async analyzeResume(resumeId: string, jobUrl: string) {
     const response = await apiClient.post('/resume/analyze', {
-      userId,
       resumeId,
       jobUrl
     })
@@ -48,9 +46,8 @@ export const resumeService = {
   },
 
   // Set resume as active
-  async setActiveResume(userId: string, resumeId: string) {
+  async setActiveResume(resumeId: string) {
     const response = await apiClient.put('/resume/active', {
-      userId,
       resumeId
     })
     return response.data

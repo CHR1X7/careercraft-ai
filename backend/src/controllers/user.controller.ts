@@ -8,7 +8,7 @@ export class UserController {
   // Create or update user profile
   async createProfile(req: Request, res: Response) {
     try {
-      const { userId } = req.body
+      const userId = req.userId!
       const { skills, experience, education, preferences } = req.body
 
       // Check if profile exists
@@ -50,7 +50,7 @@ export class UserController {
   // Get user profile by ID
   async getProfile(req: Request, res: Response) {
     try {
-      const { userId } = req.params
+      const userId = req.userId!
 
       const user = await prisma.user.findUnique({
         where: { id: userId },
@@ -78,7 +78,7 @@ export class UserController {
   // Update user preferences
   async updatePreferences(req: Request, res: Response) {
     try {
-      const { userId } = req.params
+      const userId = req.userId!
       const { preferences } = req.body
 
       const profile = await prisma.userProfile.update({

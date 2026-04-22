@@ -111,7 +111,6 @@ export default function ProfileForm() {
 
     try {
       await userService.createProfile({
-        userId: user.id,
         skills,
         experience,
         education

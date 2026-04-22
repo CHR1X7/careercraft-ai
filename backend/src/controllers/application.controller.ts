@@ -9,7 +9,8 @@ export class ApplicationController {
   // Create or get application
   async createApplication(req: Request, res: Response) {
     try {
-      const { userId, jobId, jobTitle, company, jobUrl, jobDescription } = req.body
+      const userId = req.userId!
+      const { jobId, jobTitle, company, jobUrl, jobDescription } = req.body
 
       // Create job if it doesn't exist
       let job = await prisma.job.findUnique({
@@ -57,7 +58,7 @@ export class ApplicationController {
   // Get all applications for user
   async getUserApplications(req: Request, res: Response) {
     try {
-      const { userId } = req.params
+      const userId = req.userId!
 
       const applications = await prisma.application.findMany({
         where: { userId },
@@ -75,8 +76,18 @@ export class ApplicationController {
   // Update application status
   async updateStatus(req: Request, res: Response) {
     try {
+      const userId = req.userId!
       const { applicationId } = req.params
       const { status } = req.body
+
+      // Verify application belongs to user
+      const existingApplication = await prisma.application.findUnique({
+        where: { id: applicationId }
+      })
+
+      if (!existingApplication || existingApplication.userId !== userId) {
+        return res.status(403).json({ error: 'Unauthorized' })
+      }
 
       const application = await prisma.application.update({
         where: { id: applicationId },
@@ -94,6 +105,7 @@ export class ApplicationController {
   // Generate tailored answer
   async generateTailoredAnswer(req: Request, res: Response) {
     try {
+      const userId = req.userId!
       const { applicationId, question } = req.body
 
       // Get application and job details
@@ -104,6 +116,11 @@ export class ApplicationController {
 
       if (!application) {
         return res.status(404).json({ error: 'Application not found' })
+      }
+
+      // Verify application belongs to user
+      if (application.userId !== userId) {
+        return res.status(403).json({ error: 'Unauthorized' })
       }
 
       // Get user profile
@@ -138,8 +155,18 @@ export class ApplicationController {
   // Update cover letter/notes
   async updateApplicationNotes(req: Request, res: Response) {
     try {
+      const userId = req.userId!
       const { applicationId } = req.params
       const { coverLetter, notes } = req.body
+
+      // Verify application belongs to user
+      const existingApplication = await prisma.application.findUnique({
+        where: { id: applicationId }
+      })
+
+      if (!existingApplication || existingApplication.userId !== userId) {
+        return res.status(403).json({ error: 'Unauthorized' })
+      }
 
       const application = await prisma.application.update({
         where: { id: applicationId },

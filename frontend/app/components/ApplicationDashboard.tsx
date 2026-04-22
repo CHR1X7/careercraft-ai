@@ -70,7 +70,7 @@ export default function ApplicationDashboard() {
   const loadApplications = async () => {
     try {
       if (!user?.id) return
-      const data = await applicationService.getUserApplications(user.id)
+      const data = await applicationService.getUserApplications()
       setApplications(data)
     } catch (error) {
       console.error('Failed to load applications:', error)

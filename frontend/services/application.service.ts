@@ -26,7 +26,6 @@ export interface Application {
 export const applicationService = {
   // Create application
   async createApplication(data: {
-    userId: string
     jobId?: string
     jobTitle?: string
     company?: string
@@ -38,8 +37,8 @@ export const applicationService = {
   },
 
   // Get user applications
-  async getUserApplications(userId: string) {
-    const response = await apiClient.get(`/applications/user/${userId}`)
+  async getUserApplications() {
+    const response = await apiClient.get('/applications')
     return response.data as Application[]
   },
 

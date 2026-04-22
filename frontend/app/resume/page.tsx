@@ -39,7 +39,7 @@ export default function ResumePage() {
   const loadResumes = async () => {
     try {
       if (!user?.id) return
-      const resumes = await resumeService.getUserResumes(user.id)
+      const resumes = await resumeService.getUserResumes()
       setSavedResumes(resumes)
       if (resumes.length > 0) {
         setSelectedResumeId(resumes[0].id)
@@ -58,7 +58,6 @@ export default function ResumePage() {
 
     try {
       const resume = await resumeService.createResume(
-        user.id,
         `Resume - ${new Date().toLocaleDateString()}`,
         resumeText
       )
@@ -88,13 +87,12 @@ export default function ResumePage() {
     const loadingToast = toast.loading('AI is analyzing your resume... This takes about 10-15 seconds.')
 
     try {
-      const analysis = await resumeService.analyzeResume(user.id, selectedResumeId, jobUrl)
+      const analysis = await resumeService.analyzeResume(selectedResumeId, jobUrl)
       setResult(analysis)
 
       // Create application
       try {
         await applicationService.createApplication({
-          userId: user.id,
           jobUrl,
           jobTitle: 'Job Position',
           company: 'Company'

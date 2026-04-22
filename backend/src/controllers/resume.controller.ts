@@ -9,7 +9,8 @@ export class ResumeController {
   // Upload/Create resume
   async createResume(req: Request, res: Response) {
     try {
-      const { userId, title, content } = req.body
+      const { title, content } = req.body
+      const userId = req.userId!
 
       const resume = await prisma.resume.create({
         data: {
@@ -48,7 +49,8 @@ export class ResumeController {
   // Analyze resume against job
   async analyzeResume(req: Request, res: Response) {
     try {
-      const { userId, resumeId, jobUrl } = req.body
+      const { resumeId, jobUrl } = req.body
+      const userId = req.userId!
 
       // Get resume
       const resume = await prisma.resume.findUnique({
@@ -57,6 +59,11 @@ export class ResumeController {
 
       if (!resume) {
         return res.status(404).json({ error: 'Resume not found' })
+      }
+
+      // Verify resume belongs to user
+      if (resume.userId !== userId) {
+        return res.status(403).json({ error: 'Unauthorized' })
       }
 
       // Call Python AI service
@@ -83,7 +90,17 @@ export class ResumeController {
   // Set resume as active
   async setActiveResume(req: Request, res: Response) {
     try {
-      const { userId, resumeId } = req.body
+      const { resumeId } = req.body
+      const userId = req.userId!
+
+      // Verify resume belongs to user
+      const resume = await prisma.resume.findUnique({
+        where: { id: resumeId }
+      })
+
+      if (!resume || resume.userId !== userId) {
+        return res.status(403).json({ error: 'Unauthorized' })
+      }
 
       // Deactivate all user resumes
       await prisma.resume.updateMany({
@@ -92,13 +109,13 @@ export class ResumeController {
       })
 
       // Activate selected resume
-      const resume = await prisma.resume.update({
+      const updatedResume = await prisma.resume.update({
         where: { id: resumeId },
         data: { isActive: true }
       })
 
       logger.info(`Active resume set for userId: ${userId}`)
-      res.json(resume)
+      res.json(updatedResume)
     } catch (error) {
       logger.error('Set active resume error:', error)
       res.status(500).json({ error: 'Failed to set active resume' })

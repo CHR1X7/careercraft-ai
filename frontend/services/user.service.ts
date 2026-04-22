@@ -23,7 +23,6 @@ export interface User {
 export const userService = {
   // Create or update user profile
   async createProfile(data: {
-    userId: string
     skills?: string[]
     experience?: any[]
     education?: any[]
@@ -34,14 +33,14 @@ export const userService = {
   },
 
   // Get user profile by ID
-  async getProfile(userId: string) {
-    const response = await apiClient.get(`/users/${userId}`)
+  async getProfile() {
+    const response = await apiClient.get('/users/')
     return response.data
   },
 
   // Update user preferences
-  async updatePreferences(userId: string, preferences: any) {
-    const response = await apiClient.put(`/users/${userId}/preferences`, { preferences })
+  async updatePreferences(preferences: any) {
+    const response = await apiClient.put('/users/preferences', { preferences })
     return response.data
   }
 }
