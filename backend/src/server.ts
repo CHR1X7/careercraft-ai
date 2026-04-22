@@ -13,32 +13,15 @@ import { logger } from './utils/logger'
 dotenv.config()
 
 const app = express()
-const PORT = Number(process.env.PORT) || 5000
+const PORT = Number(process.env.PORT) || 5000  // ✅ Convert to number
 
 // Security
 app.use(helmet())
 
-// CORS Configuration
-const allowedOrigins = [
-  'http://localhost:3000',
-  'http://localhost:3001',
-  'https://careercraft-ai-aske.vercel.app',
-  process.env.FRONTEND_URL
-].filter(Boolean)
-
+// CORS - allow all origins
 app.use(cors({
-  origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps or curl requests)
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true)
-    } else {
-      callback(new Error('Not allowed by CORS'))
-    }
-  },
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
-  maxAge: 86400
+  origin: '*',
+  credentials: true
 }))
 
 // Rate limiting
@@ -84,5 +67,4 @@ export default app
 app.listen(PORT, '0.0.0.0', () => {
   logger.info(`🚀 Server running on port ${PORT}`)
   logger.info(`📝 Environment: ${process.env.NODE_ENV || 'development'}`)
-  logger.info(`✅ CORS allowed origins: ${allowedOrigins.join(', ')}`)
 })

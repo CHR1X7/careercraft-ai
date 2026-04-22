@@ -28,32 +28,23 @@ export const authenticateToken = (req: Request, res: Response, next: NextFunctio
     const token = authHeader && authHeader.split(' ')[1]
 
     if (!token) {
-      logger.warn('No token provided for protected route:', req.path)
       return res.status(401).json({ error: 'Access token required' })
     }
 
-    // Decode token without verification first to extract userId/sub
-    const decoded: any = jwt.decode(token, { complete: true })
-    
-    if (!decoded) {
-      logger.error('Failed to decode token')
-      return res.status(403).json({ error: 'Invalid token format' })
+    jwt.verify(
+      token,
+      process.env.JWT_SECRET || 'fallback-secret',
+      (err: any, decoded: any) => {
+        if (err) {
+          logger.error('Token verification failed:', err.message)
+          return res.status(403).json({ error: 'Invalid or expired token' })
     }
 
-    // Extract userId from either 'userId' or 'sub' (Clerk uses 'sub')
-    const userId = decoded.payload?.userId || decoded.payload?.sub
-    
-    if (!userId) {
-      logger.error('No userId found in token payload:', decoded.payload)
-      return res.status(403).json({ error: 'Invalid token: missing userId' })
-    }
-
-    // Attach userId to request
-    req.userId = userId
-    req.email = decoded.payload?.email || ''
-    
-    logger.info(`✅ Auth successful for userId: ${userId}`)
+        req.userId = decoded.userId
+        req.email = decoded.email
     next()
+      }
+    )
   } catch (error) {
     logger.error('Auth middleware error:', error)
     res.status(500).json({ error: 'Authentication error' })
