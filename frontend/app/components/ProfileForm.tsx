@@ -1,26 +1,22 @@
 'use client'
-
 import { useState, useEffect } from 'react'
 import { useUser } from '@clerk/nextjs'
 import { motion } from 'framer-motion'
-import { Save, Plus, X, AlertCircle } from 'lucide-react'
+import { Save, Plus, X } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { userService } from '@/services/user.service'
-
 interface Experience {
   company: string
   position: string
   duration: string
   description: string
 }
-
 interface Education {
   school: string
   degree: string
   field: string
   year: string
 }
-
 export default function ProfileForm() {
   const { user } = useUser()
   const [loading, setLoading] = useState(false)
@@ -30,32 +26,27 @@ export default function ProfileForm() {
   const [education, setEducation] = useState<Education[]>([])
   const [isAddingExp, setIsAddingExp] = useState(false)
   const [isAddingEdu, setIsAddingEdu] = useState(false)
-
   const [expForm, setExpForm] = useState<Experience>({
     company: '',
     position: '',
     duration: '',
     description: ''
   })
-
   const [eduForm, setEduForm] = useState<Education>({
     school: '',
     degree: '',
     field: '',
     year: ''
   })
-
   useEffect(() => {
     if (user?.id) {
       loadProfile()
     }
   }, [user?.id])
-
   const loadProfile = async () => {
     try {
-      if (!user?.id) return
-      const profile = await userService.getProfile(user.id)
-      if (profile.profile) {
+      const profile = await userService.getProfile()
+      if (profile?.profile) {
         setSkills(profile.profile.skills || [])
         setExperience(profile.profile.experience || [])
         setEducation(profile.profile.education || [])
@@ -64,18 +55,15 @@ export default function ProfileForm() {
       console.error('Failed to load profile:', error)
     }
   }
-
   const addSkill = () => {
     if (newSkill.trim() && !skills.includes(newSkill.trim())) {
       setSkills([...skills, newSkill.trim()])
       setNewSkill('')
     }
   }
-
   const removeSkill = (skill: string) => {
     setSkills(skills.filter((s) => s !== skill))
   }
-
   const addExperience = () => {
     if (expForm.company && expForm.position) {
       setExperience([...experience, expForm])
@@ -83,11 +71,9 @@ export default function ProfileForm() {
       setIsAddingExp(false)
     }
   }
-
   const removeExperience = (index: number) => {
     setExperience(experience.filter((_, i) => i !== index))
   }
-
   const addEducation = () => {
     if (eduForm.school && eduForm.degree) {
       setEducation([...education, eduForm])
@@ -95,20 +81,12 @@ export default function ProfileForm() {
       setIsAddingEdu(false)
     }
   }
-
   const removeEducation = (index: number) => {
     setEducation(education.filter((_, i) => i !== index))
   }
-
   const saveProfile = async () => {
-    if (!user?.id) {
-      toast.error('User not found')
-      return
-    }
-
     setLoading(true)
     const loadingToast = toast.loading('Saving profile...')
-
     try {
       await userService.createProfile({
         skills,
@@ -123,7 +101,6 @@ export default function ProfileForm() {
       setLoading(false)
     }
   }
-
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <motion.div
@@ -136,7 +113,6 @@ export default function ProfileForm() {
           <p className="text-gray-600 mb-8">
             Build your professional profile to get better job matches
           </p>
-
           {/* Skills Section */}
           <div className="mb-12">
             <h2 className="text-2xl font-semibold text-gray-800 mb-6">Skills</h2>
@@ -175,7 +151,6 @@ export default function ProfileForm() {
               </div>
             </div>
           </div>
-
           {/* Experience Section */}
           <div className="mb-12">
             <h2 className="text-2xl font-semibold text-gray-800 mb-6">Experience</h2>
@@ -201,7 +176,6 @@ export default function ProfileForm() {
                   </button>
                 </div>
               ))}
-
               {isAddingExp ? (
                 <div className="border border-blue-300 rounded-lg p-4 bg-blue-50 space-y-4">
                   <input
@@ -256,7 +230,6 @@ export default function ProfileForm() {
               )}
             </div>
           </div>
-
           {/* Education Section */}
           <div className="mb-12">
             <h2 className="text-2xl font-semibold text-gray-800 mb-6">Education</h2>
@@ -280,7 +253,6 @@ export default function ProfileForm() {
                   </button>
                 </div>
               ))}
-
               {isAddingEdu ? (
                 <div className="border border-blue-300 rounded-lg p-4 bg-blue-50 space-y-4">
                   <input
@@ -336,7 +308,6 @@ export default function ProfileForm() {
               )}
             </div>
           </div>
-
           {/* Save Button */}
           <button
             onClick={saveProfile}
