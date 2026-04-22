@@ -24,5 +24,3 @@ router.post('/:applicationId/generate-answer', applicationController.generateTai
 router.patch('/:applicationId/notes', applicationController.updateApplicationNotes.bind(applicationController))
 
 export default router
-
-export default router
