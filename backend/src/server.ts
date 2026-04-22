@@ -13,7 +13,7 @@ import { logger } from './utils/logger'
 dotenv.config()
 
 const app = express()
-const PORT = process.env.PORT || 5000
+const PORT = Number(process.env.PORT) || 5000  // ✅ Convert to number
 
 // Security
 app.use(helmet())
@@ -35,7 +35,7 @@ app.use(limiter)
 app.use(express.json({ limit: '10mb' }))
 app.use(express.urlencoded({ extended: true }))
 
-// Health check - MUST be before routes
+// Health check
 app.get('/health', (req, res) => {
   res.json({ 
     status: 'OK', 
@@ -44,7 +44,7 @@ app.get('/health', (req, res) => {
   })
 })
 
-// Root endpoint - MUST be before routes
+// Root endpoint
 app.get('/', (req, res) => {
   res.json({
     message: 'CareerCraft AI Backend',
@@ -53,7 +53,7 @@ app.get('/', (req, res) => {
   })
 })
 
-// API Routes - mount at DIFFERENT paths to avoid conflicts!
+// API Routes
 app.use('/api/auth', authRoutes)
 app.use('/api/users', userRoutes)
 app.use('/api/resume', resumeRoutes)
@@ -64,7 +64,7 @@ app.use(errorHandler)
 
 export default app
 
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   logger.info(`🚀 Server running on port ${PORT}`)
   logger.info(`📝 Environment: ${process.env.NODE_ENV || 'development'}`)
 })
